@@ -1,0 +1,11 @@
+[template]
+src = "server.json.tmpl"
+dest = "/opt/rancher/config/server.json"
+owner = "root"
+mode = "0644"
+keys = [
+  "/self/container/",
+  "/self/service/containers/0/",
+  "/containers",
+  "/services/consul-server/metadata/"
+]

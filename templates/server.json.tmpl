@@ -1,0 +1,33 @@
+{
+    {{ if (eq (getv "/self/container/service_index") "1") }}"bootstrap": true,{{else}}
+    "retry_join": [{{ $containerName := getv "/self/service/containers/0/name"}}"{{getv (printf "/containers/%s/primary_ip" $containerName)}}"],
+    "bootstrap": false,{{end}}
+    "server": true,
+
+    "datacenter": "{{getv "/services/consul-server/metadata/datacenter"}}",
+    "domain": "{{getv "/services/consul-server/metadata/domain"}}",
+
+    "advertise_addr": "{{getv "/self/container/primary_ip"}}",
+    "client_addr": "{{getv "/self/container/primary_ip"}}",
+
+    "data_dir": "/var/consul/{{getv "/self/container/service_index"}}",
+    "encrypt": "{{getv "/services/consul-server/metadata/gossip"}}",
+
+    "node_name": "{{getv "/self/container/name"}}",
+    "leave_on_terminate": true,
+
+    "ca_file": "/opt/rancher/ssl/ca.crt",
+    "cert_file": "/opt/rancher/ssl/consul.crt",
+    "key_file": "/opt/rancher/ssl/consul.key",
+    "ports": {
+      "https": 8443
+    },
+
+    "ui": {{getv "/services/consul-server/metadata/ui"}},
+
+    "log_level": "INFO",
+
+    "acl_datacenter": "{{getv "/services/consul-server/metadata/datacenter"}}",
+    "acl_master_token": "{{getv "/services/consul-server/metadata/master-token"}}",
+    "acl_default_policy": "{{getv "/services/consul-server/metadata/default-policy"}}"
+}
